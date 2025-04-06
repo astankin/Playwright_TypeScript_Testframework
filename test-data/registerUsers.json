@@ -1,0 +1,15 @@
+{
+    "newUser": {
+      "firstName": "Alex123",
+      "lastName": "Stankov",
+      "telephone": "0888888888"
+    },
+    "existingUser": {
+      "firstName": "Alex123",
+      "lastName": "Stankov",
+      "email": "alex@gmail.com",
+      "telephone": "0888888888",
+      "password": "Astankin83@"
+    }
+  }
+  
