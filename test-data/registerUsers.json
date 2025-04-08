@@ -1,9 +1,5 @@
 {
-    "newUser": {
-      "firstName": "Alex123",
-      "lastName": "Stankov",
-      "telephone": "0888888888"
-    },
+
     "existingUser": {
       "email": "nasko@yahoo.com",
       "password": "1234",
