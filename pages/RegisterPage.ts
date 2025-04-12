@@ -15,15 +15,30 @@ export class RegisterPage {
   readonly confirmPassword: Locator;
   readonly registerBtn: Locator;
   readonly alertMessage: Locator;
+  readonly errorMessage: Locator;
+  readonly nameError: Locator;  
+  readonly emailError: Locator; 
+  readonly passwordError: Locator;
+  readonly confirmPasswordError: Locator;
+  readonly invalidPasswordError: Locator;
+  readonly mismatchPasswordError: Locator;
+
 
   constructor(page: Page) {
     this.page = page;
-    this.name = page.locator('#name');
-    this.email = page.locator('#email');
-    this.password = page.locator('input[type="password"]#password');
-    this.confirmPassword = page.locator('input[type="password"]#passwordConfirm');
-    this.registerBtn = page.locator('//*[@id="root"]/main/div/div/div/div/form/button');
-    this.alertMessage = page.locator('.alert.alert-danger.alert-dismissible');
+    this.name = this.page.locator('#name');
+    this.email = this.page.locator('#email');
+    this.password = this.page.locator('input[type="password"]#password');
+    this.confirmPassword = this.page.locator('input[type="password"]#passwordConfirm');
+    this.registerBtn = this.page.locator('//*[@id="root"]/main/div/div/div/div/form/button');
+    this.alertMessage = this.page.locator('.alert.alert-danger.alert-dismissible');
+    this.errorMessage = this.page.locator('//*[@id="root"]/main/div/div/div/div/div[1]');
+    this.nameError = this.page.locator('#nameError');
+    this.emailError = this.page.locator('#emailError');
+    this.passwordError = this.page.locator('#passwordError');
+    this.confirmPasswordError = this.page.locator('#confirmPasswordError');
+    this.mismatchPasswordError = this.page.locator('//*[@id="root"]/main/div/div/div/div/form/div[4]/div[2]');
+    this.invalidPasswordError = this.page.locator('//*[@id="root"]/main/div/div/div/div/form/div[3]/div[2]');
   }
 
   async goto() {
@@ -49,8 +64,12 @@ export class RegisterPage {
     await this.registerBtn.click();
   }
 
-  async expectAccountCreationSuccess() {
-    await expect(this.page).toHaveTitle('Your Account Has Been Created!');
+  async getErrorMessageText(): Promise<string> {
+    const text = await this.errorMessage.textContent();
+    if (text === null) {
+      throw new Error('Error message is missing!');
+    }
+    return text.trim();
   }
 
   async getAlertMessageText(): Promise<string> {
@@ -60,4 +79,22 @@ export class RegisterPage {
     }
     return text.trim();
   }
+
+  async getInvalidPasswordErrorText(): Promise<string> {
+    const text = await this.invalidPasswordError.textContent();
+    if (text === null) {
+      throw new Error('Invalid password error message is missing!');
+    }
+    return text.trim();
+  }
+  async getMismatchPasswordErrorText(): Promise<string> {
+    const text = await this.mismatchPasswordError.textContent();
+    if (text === null) {
+      throw new Error('Mismatch password error message is missing!');
+    }
+    return text.trim();
+  }
 }
+
+
+

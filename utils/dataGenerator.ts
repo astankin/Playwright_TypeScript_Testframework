@@ -1,5 +1,7 @@
 // utils/dataGenerator.ts
 
+import { Client } from 'pg';
+
 export function generateRandomEmail(domain: string = 'test.com'): string {
     const timestamp = Date.now();
     return `user${timestamp}@${domain}`;
@@ -41,6 +43,34 @@ export function generateRandomEmail(domain: string = 'test.com'): string {
   
     return `${firstName} ${lastName}`;
   }
+
+  // utils/testUtils.ts
+
+// utils/testUtils.ts
+
+export async function deleteUserFromDb(email: string): Promise<void> {
+  const client = new Client({
+    host: 'localhost',       
+    user: 'postgres',        
+    password: 'root',        
+    database: 'stankinshop', 
+    port: 5433,             
+  });
+
+  await client.connect();
+
+  try {
+    // Adjust the query to your database schema if necessary (make sure 'users' table exists)
+    await client.query('DELETE FROM auth_user WHERE email = $1', [email]);
+    console.log(`Deleted user with email: ${email}`);
+  } catch (err) {
+    console.error('Error deleting user:', err);
+  } finally {
+    await client.end();
+  }
+}
+
+
   
   
   
