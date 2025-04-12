@@ -6,11 +6,13 @@ export class HomePage {
   readonly page: Page;
   readonly usernameLocator: Locator;
   readonly logoutBtn: Locator;
+  readonly logInBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.usernameLocator = page.locator('#username');
     this.logoutBtn = page.locator('a.dropdown-item', { hasText: 'Logout' });
+    this.logInBtn = this.page.locator('a.nav-link', { hasText: 'Login' });
   }
 
   async goto() {

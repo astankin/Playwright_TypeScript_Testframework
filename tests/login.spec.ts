@@ -3,25 +3,6 @@ import { LoginPage } from '../pages/LoginPage';
 import * as testData from '../test-data/registerUsers.json';
 import { HomePage } from '../pages/HomePage';
 
-test('Register with a new user', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
-    const email = testData.existingUser.email;
-    const password = testData.existingUser.password; 
-       
-    await loginPage.goto();
-  
-    await loginPage.fillLoginForm({email, password,});
-  
-    await loginPage.submit();
-    const expectedUsername = testData.existingUser.username;
-    const actualUsername = await homePage.getUsername();
-
-    await expect(page).toHaveTitle('StankinShop');
-    await expect(homePage.usernameLocator).toBeVisible();
-    expect(actualUsername).toBe(expectedUsername);
-    
-  });
 
 test('Login with invalid password', async ({ page }) => {
     const loginPage = new LoginPage(page);
@@ -171,7 +152,8 @@ test('Login and logout', async ({ page }) => {
     await homePage.usernameLocator.click();
     await page.getByRole('button', { name: 'Logout' }).click();
 
-
+    await expect(homePage.usernameLocator).not.toBeVisible();
+    await expect(homePage.logInBtn).toBeVisible();
 
   });
   

@@ -48,27 +48,57 @@ export function generateRandomEmail(domain: string = 'test.com'): string {
 
 // utils/testUtils.ts
 
+
+// utils/testUtils.ts
+
+import sqlite3 from 'sqlite3';
+import { open } from 'sqlite';
+import path from 'path';
+
 export async function deleteUserFromDb(email: string): Promise<void> {
-  const client = new Client({
-    host: 'localhost',       
-    user: 'postgres',        
-    password: 'root',        
-    database: 'stankinshop', 
-    port: 5433,             
+  const dbPath = path.resolve(
+    'C:/Users/user/Documents/Python/Django-React_Ecommerce/StankinShop/backend/db.sqlite3'
+  );
+
+  const db = await open({
+    filename: dbPath,
+    driver: sqlite3.Database,
   });
 
-  await client.connect();
-
   try {
-    // Adjust the query to your database schema if necessary (make sure 'users' table exists)
-    await client.query('DELETE FROM auth_user WHERE email = $1', [email]);
+    await db.run('DELETE FROM auth_user WHERE email = ?', email); // use correct table name if custom user model
     console.log(`Deleted user with email: ${email}`);
   } catch (err) {
     console.error('Error deleting user:', err);
   } finally {
-    await client.end();
+    await db.close();
   }
 }
+
+
+
+// export async function deleteUserFromDb(email: string): Promise<void> {
+//   const client = new Client({
+//     host: 'localhost',       
+//     user: 'postgres',        
+//     password: 'root',        
+//     database: 'stankinshop', 
+//     port: 5433,             
+//   });
+
+//   await client.connect();
+
+//   try {
+//     // Adjust the query to your database schema if necessary (make sure 'users' table exists)
+//     await client.query('DELETE FROM auth_user WHERE email = $1', [email]);
+//     console.log(`Deleted user with email: ${email}`);
+//   } catch (err) {
+//     console.error('Error deleting user:', err);
+//   } finally {
+//     await client.end();
+//   }
+// }
+
 
 
   

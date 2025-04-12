@@ -18,6 +18,7 @@ export class RegisterPage {
   readonly errorMessage: Locator;
   readonly nameError: Locator;  
   readonly emailError: Locator; 
+  readonly invalidEmailMessage: Locator;
   readonly passwordError: Locator;
   readonly confirmPasswordError: Locator;
   readonly invalidPasswordError: Locator;
@@ -39,6 +40,7 @@ export class RegisterPage {
     this.confirmPasswordError = this.page.locator('#confirmPasswordError');
     this.mismatchPasswordError = this.page.locator('//*[@id="root"]/main/div/div/div/div/form/div[4]/div[2]');
     this.invalidPasswordError = this.page.locator('//*[@id="root"]/main/div/div/div/div/form/div[3]/div[2]');
+    this.invalidEmailMessage = this.page.locator('//*[@id="root"]/main/div/div/div/div/form/div[2]/div');
   }
 
   async goto() {
@@ -94,6 +96,15 @@ export class RegisterPage {
     }
     return text.trim();
   }
+  async getInvalidEmailErrorText(): Promise<string> {
+    const text = await this.invalidEmailMessage.textContent();
+    if (text === null) {
+      throw new Error('Name error message is missing!');
+    }
+    return text.trim();
+  }
+
+
 }
 
 

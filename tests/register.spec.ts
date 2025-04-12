@@ -5,7 +5,7 @@ import { RegisterPage } from '../pages/RegisterPage';
 import { generateRandomEmail, generateRandomPassword, generateRandomName, deleteUserFromDb } from '../utils/dataGenerator';
 import * as testData from '../test-data/registerUsers.json';
 import { HomePage } from '../pages/HomePage';
-import axios from 'axios';
+
 
 let registerPage: RegisterPage;
 let createdTestUser: { email: string } | null = null;
@@ -140,6 +140,26 @@ test('Register with weak password should show validation error', async ({ page }
   expect(validationMessage).toContain('(!@#$%^&*?)');
 });
 
+test('Register with short the 8 chars password should show validation error', async ({ page }) => {
+  const registerPage = new RegisterPage(page);
+  await registerPage.goto();
+
+  const weakPassword = 'password'; // no special chars, numbers, etc.
+
+  await registerPage.fillRegistrationForm({
+    name: generateRandomName(),
+    email: generateRandomEmail(),
+    password: 'As8@',
+    confirmPassword: 'As8@',
+  });
+
+  await registerPage.submit();
+
+  const validationMessage = await registerPage.getInvalidPasswordErrorText();
+  await expect(registerPage.invalidPasswordError).toBeVisible();
+  expect(validationMessage).toBe('Password must be at least 8 characters long.');
+});
+
 // test('Register with special characters in name should show error', async ({ page }) => {
 //   const registerPage = new RegisterPage(page);
 //   await registerPage.goto();
@@ -209,5 +229,69 @@ test('Register with uppercase email should treat it the same as lowercase', asyn
   expect(actualUsername).toBe(name.toLowerCase().trim());
 
 });
+
+test('Register with SQL injection in name should show validation error', async () => {
+  await registerPage.goto();
+
+  const sqlInjectionName = "' OR 1=1 --";
+  const password = generateRandomPassword();
+  const email = generateRandomEmail();
+
+  createdTestUser = { email: email };
+
+  await registerPage.fillRegistrationForm({
+    name: sqlInjectionName,
+    email: email,
+    password,
+    confirmPassword: password,
+  });
+
+  await registerPage.submit();
+
+  await expect(registerPage.errorMessage).toBeVisible();
+  // Optionally, check if the database was affected (e.g., check for any unexpected behavior)
+});
+
+test('Register with XSS script injection should be escaped', async () => {
+  await registerPage.goto();
+
+  const xssName = '<script>alert("XSS Attack")</script>';
+  const xssEmail = '<img src="x" onerror="alert(\'XSS Attack\')" />';
+  const password = generateRandomPassword();
+
+  createdTestUser = { email: xssEmail };
+
+  await registerPage.fillRegistrationForm({
+    name: xssName,
+    email: xssEmail,
+    password,
+    confirmPassword: password,
+  });
+
+  await registerPage.submit();
+
+  await expect(registerPage.errorMessage).toBeVisible();
+  // Ensure the input is sanitized/escaped in the UI and doesn't execute malicious scripts
+});
+
+test('Register with invalid email format should show validation error', async ({ page }) => {
+  const registerPage = new RegisterPage(page);
+  await registerPage.goto();
+
+  const password = generateRandomPassword();
+  await registerPage.fillRegistrationForm({
+    name: generateRandomName(),
+    email: 'invalidemail@mail', // missing domain
+    password,
+    confirmPassword: password,
+  });
+
+  await registerPage.submit();
+
+  const validationMessage = await registerPage.getInvalidEmailErrorText();
+  expect(validationMessage).toBe("Please enter a valid email address.");
+});
+
+
 
 
