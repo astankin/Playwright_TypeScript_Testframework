@@ -275,8 +275,6 @@ test('Register with XSS script injection should be escaped', async () => {
 });
 
 test('Register with invalid email format should show validation error', async ({ page }) => {
-  const registerPage = new RegisterPage(page);
-  await registerPage.goto();
 
   const password = generateRandomPassword();
   await registerPage.fillRegistrationForm({
@@ -290,6 +288,42 @@ test('Register with invalid email format should show validation error', async ({
 
   const validationMessage = await registerPage.getInvalidEmailErrorText();
   expect(validationMessage).toBe("Please enter a valid email address.");
+});
+
+test('Register with Disposable email addresses are not allowed', async ({ page }) => { 
+  const disposableDomains = [
+    'mailinator.com', 
+    'guerrillamail.com', 
+    '10minutemail.com',
+    'tempmail.com', 
+    'trashmail.com', 
+    'yopmail.com', 
+    'getnada.com'
+  ];
+  for (const domain of disposableDomains) {
+      const name = generateRandomName();
+      const disposableEmail = `${generateRandomEmail(domain)}`;
+      const password = generateRandomPassword();
+      
+      await registerPage.fillRegistrationForm({
+        name, 
+        email: disposableEmail,
+        password,
+        confirmPassword: password,
+      });
+      await registerPage.submit();
+      const expectedErrorText: string = 'Disposable email addresses are not allowed.';
+      await expect(registerPage.errorMessage).not.toHaveText('Loading...');
+      // await expect(registerPage.emailError).toBeVisible();
+      const actualErrorText: string = await registerPage.getInvalidEmailErrorText();
+      expect(actualErrorText).toBe(expectedErrorText);
+      expect(page.url()).toContain('/register');
+      
+      await registerPage.email.fill(''); // Clear the email field for the next iteration  
+      await page.waitForTimeout(2000);
+
+  }
+
 });
 
 

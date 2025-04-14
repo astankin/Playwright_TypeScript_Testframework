@@ -16,7 +16,7 @@ export class HomePage {
   }
 
   async goto() {
-    await this.page.goto(testData.loginData.url);
+    await this.page.goto(testData.home_page.url);
   }
 
   async getUsername(): Promise<string> {
