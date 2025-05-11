@@ -1,4 +1,21 @@
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MjQ5OTk5LCJpYXQiOjE3NDQ2NTc5OTksImp0aSI6IjI5MzE0MDA1OWY0MTQ5NTg4NGFiMmMzNWUyNjg4MmVkIiwidXNlcl9pZCI6MX0.qgMsyCmdhsl-YQ0vI5XEM0u8uJvwplhxaMBLEugydqQ"
+    "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MjQ5OTk5LCJpYXQiOjE3NDQ2NTc5OTksImp0aSI6IjI5MzE0MDA1OWY0MTQ5NTg4NGFiMmMzNWUyNjg4MmVkIiwidXNlcl9pZCI6MX0.qgMsyCmdhsl-YQ0vI5XEM0u8uJvwplhxaMBLEugydqQ",
+    "baseUrl": "http://127.0.0.1:8000/api",
+    "userId": 1,
+    "userName": "nasko",
+    "email": "nasko@yahoo.com",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MjQ5OTk5LCJpYXQiOjE3NDQ2NTc5OTksImp0aSI6IjI5MzE0MDA1OWY0MTQ5NTg4NGFiMmMzNWUyNjg4MmVkIiwidXNlcl9pZCI6MX0.qgMsyCmdhsl-YQ0vI5XEM0u8uJvwplhxaMBLEugydqQ"
+      },
+    "existingUser": {
+      "_id": 1,
+      "email": "nasko@yahoo.com",
+      "password": "1234",
+      "username": "nasko@yahoo.com",
+      "name": "Nasko",
+      "phone": "1234567890",
+      "isAdmin": true
+    }
     
 }

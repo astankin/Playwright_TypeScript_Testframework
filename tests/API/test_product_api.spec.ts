@@ -1,7 +1,9 @@
 import { test, expect } from '@playwright/test';
+import * as testData from '../../test-data/api_testing_data.json';
+import { makeRequest } from '../../utils/request';
 
-const baseUrl = 'http://127.0.0.1:8000/api';
-const token = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MjQ5OTk5LCJpYXQiOjE3NDQ2NTc5OTksImp0aSI6IjI5MzE0MDA1OWY0MTQ5NTg4NGFiMmMzNWUyNjg4MmVkIiwidXNlcl9pZCI6MX0.qgMsyCmdhsl-YQ0vI5XEM0u8uJvwplhxaMBLEugydqQ';
+const baseUrl = testData.baseUrl;
+const token = testData.token; 
 const headers = {
   'Content-Type': 'application/json',
   Authorization: token,
@@ -16,17 +18,17 @@ const productBody = {
   countInStock: 10,
 };
 
-async function makeRequest(
-  request: any,
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
-  endpoint: string,
-  headers: Record<string, string>,
-  data?: Record<string, any>
-) {
-  const response = await request[method.toLowerCase()](`${baseUrl}${endpoint}`, { headers, data });
-  expect(response.ok()).toBeTruthy();
-  return await response.json();
-}
+// async function makeRequest(
+//   request: any,
+//   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+//   endpoint: string,
+//   headers: Record<string, string>,
+//   data?: Record<string, any>
+// ) {
+//   const response = await request[method.toLowerCase()](`${baseUrl}${endpoint}`, { headers, data });
+//   expect(response.ok()).toBeTruthy();
+//   return await response.json();
+// }
 
 async function deleteProduct(request: any, productId: string, headers: Record<string, string>) {
   const response = await request.delete(`${baseUrl}/products/delete/${productId}/`, { headers });
